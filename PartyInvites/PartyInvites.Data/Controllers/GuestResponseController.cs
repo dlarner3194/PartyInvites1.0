@@ -10,8 +10,7 @@ using PartyInvites.Data.Models;
 namespace PartyInvites.Data.Controllers
 {
   [Route("api/[controller]")]
-  //[ApiController]
-  public class GuestResponseController : ControllerBase
+  public class GuestResponseController : Controller
   {
     private readonly GuestResponseContext _context;
 
@@ -19,18 +18,42 @@ namespace PartyInvites.Data.Controllers
     {
       _context = context;
 
-      if(_context.GuestResponses.Count() == 0)
+      if (_context.GuestResponses.Count() == 0)
       {
         _context.GuestResponses.Add(new GuestResponse { Name = "Daniel" });
         _context.SaveChanges();
       }
     }
 
-    // GET: api/<controller>
-    //[HttpGet]
-    //public ActionResult<List<GuestResponse>> GetAll()
-    //{
-    //  return _context.GuestResponses.ToList();
-    //}
+    [HttpGet]
+    public List<GuestResponse> GetAll()
+    {
+      return _context.GuestResponses.ToList();
+    }
+
+    [HttpGet("{id}", Name = "GetResponse")]
+    public IActionResult GetById(int id)
+    {
+      var response = _context.GuestResponses.Find(id);
+      if (response == null)
+      {
+        return NotFound();
+      }
+      return Ok(response);
+    }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] GuestResponse guestResponse)
+    {
+      if (guestResponse == null)
+      {
+        return BadRequest();
+      }
+
+      _context.GuestResponses.Add(guestResponse);
+      _context.SaveChanges();
+
+      return CreatedAtRoute("GetResponse", new { id = guestResponse.Id }, guestResponse);
+    }
   }
 }
