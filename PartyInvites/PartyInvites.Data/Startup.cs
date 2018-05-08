@@ -15,18 +15,38 @@ namespace PartyInvites.Data
 {
     public class Startup
     {
-        //public Startup(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
+    //public Startup(IConfiguration configuration)
+    //{
+    //    Configuration = configuration;
+    //}
+
+        string _testSecret = null;
+        public Startup(IHostingEnvironment env)
+        {
+          var builder = new ConfigurationBuilder();
+          if (env.IsDevelopment())
+          {
+            builder.AddUserSecrets<Startup>();
+          }
+
+          Configuration = builder.Build();
+        }    
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GuestResponseContext>(opt =>
-                opt.UseInMemoryDatabase("GuestList"));
+            //in memory db
+            //services.AddDbContext<GuestResponseContext>(opt =>
+            //    opt.UseInMemoryDatabase("GuestList"));
+
+            //sql server connection
+            var connection = @"Server=desktop-gagc9ti\sqlexpress;Database=PartyInvitesDB;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<GuestResponseContext>(options => options.UseSqlServer(connection));
+
+            _testSecret = Configuration["MySecret"];
+            
             services.AddMvc();
         }
 
