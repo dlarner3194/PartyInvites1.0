@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PartyInvites.Data.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace PartyInvites.Data.Controllers
 {
   [Route("api/[controller]")]
@@ -25,7 +23,7 @@ namespace PartyInvites.Data.Controllers
       }
     }
 
-    [HttpGet]
+    [HttpGet(Name = "GetList")]
     public List<GuestResponse> GetAll()
     {
       return _context.GuestResponses.ToList();

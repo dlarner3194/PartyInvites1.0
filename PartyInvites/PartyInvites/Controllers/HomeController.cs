@@ -49,7 +49,7 @@ namespace PartyInvites.Controllers
     [HttpGet]
     public async Task<ViewResult> ListResponses()
     {
-      var res = await httpClient.GetAsync(_Url + "api/GuestResponse/GetAll");
+      var res = await httpClient.GetAsync(_Url + "api/GuestResponse");
 
       if (res.IsSuccessStatusCode)
       {
